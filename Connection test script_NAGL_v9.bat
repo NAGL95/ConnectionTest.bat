@@ -41,7 +41,7 @@ if !ERRORLEVEL! EQU 0 (
 )
 
 :: Сетевые тесты
-set domains=google.com modimio.ru
+set domains=google.com yandex.ru
 set /a current=1
 set /a total=7
 
@@ -72,32 +72,32 @@ for %%d in (%domains%) do (
 :: nslookup
 set /a current+=1
 set /a percent=100 * !current! / !total!
-echo [!percent!%%] nslookup modimio.ru...
+echo [!percent!%%] nslookup yandex.ru...
 
-echo ===== nslookup modimio.ru ===== >> "%outfile%"
-nslookup modimio.ru >> "%outfile%" 2>&1
+echo ===== nslookup yandex.ru ===== >> "%outfile%"
+nslookup yandex.ru >> "%outfile%" 2>&1
 if !ERRORLEVEL! EQU 0 (
-    echo nslookup modimio.ru — ОК >> "%tempstatus%"
+    echo nslookup yandex.ru — ОК >> "%tempstatus%"
 ) else (
-    echo nslookup modimio.ru — ОШИБКА >> "%tempstatus%"
+    echo nslookup yandex.ru — ОШИБКА >> "%tempstatus%"
 )
 
 :: curl
 set /a current+=1
 set /a percent=100 * !current! / !total!
-echo [!percent!%%] curl modimio.ru...
+echo [!percent!%%] curl yandex.ru...
 
 where curl.exe >nul 2>nul
 if %ERRORLEVEL% neq 0 (
     echo curl — НЕ НАЙДЕН >> "%tempstatus%"
     echo curl не найден, пропущено >> "%outfile%"
 ) else (
-    echo ===== curl -I modimio.ru ===== >> "%outfile%"
-    curl.exe -I modimio.ru >> "%outfile%" 2>&1
+    echo ===== curl -I yandex.ru ===== >> "%outfile%"
+    curl.exe -I yandex.ru >> "%outfile%" 2>&1
     if !ERRORLEVEL! EQU 0 (
-        echo curl modimio.ru — ОК >> "%tempstatus%"
+        echo curl yandex.ru — ОК >> "%tempstatus%"
     ) else (
-        echo curl modimio.ru — ОШИБКА >> "%tempstatus%"
+        echo curl yandex.ru — ОШИБКА >> "%tempstatus%"
     )
 )
 
