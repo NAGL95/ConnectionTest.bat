@@ -41,9 +41,9 @@ if !ERRORLEVEL! EQU 0 (
 )
 
 :: Сетевые тесты
-set domains=google.com yandex.ru
+set domains=google.com yandex.ru youtrack.cloud myjetbrains.com jetbrains.com chatgpt.com
 set /a current=1
-set /a total=7
+set /a total=10
 
 for %%d in (%domains%) do (
     set /a current+=1
@@ -82,22 +82,25 @@ if !ERRORLEVEL! EQU 0 (
     echo nslookup yandex.ru — ОШИБКА >> "%tempstatus%"
 )
 
-:: curl
+:: curl для всех доменов
 set /a current+=1
 set /a percent=100 * !current! / !total!
-echo [!percent!%%] curl yandex.ru...
+echo [!percent!%%] curl по всем доменам...
 
 where curl.exe >nul 2>nul
 if %ERRORLEVEL% neq 0 (
     echo curl — НЕ НАЙДЕН >> "%tempstatus%"
-    echo curl не найден, пропущено >> "%outfile%"
+    echo curl не найден, все проверки пропущены >> "%outfile%"
 ) else (
-    echo ===== curl -I yandex.ru ===== >> "%outfile%"
-    curl.exe -I yandex.ru >> "%outfile%" 2>&1
-    if !ERRORLEVEL! EQU 0 (
-        echo curl yandex.ru — ОК >> "%tempstatus%"
-    ) else (
-        echo curl yandex.ru — ОШИБКА >> "%tempstatus%"
+    for %%d in (%domains%) do (
+        echo ===== curl -I %%d ===== >> "%outfile%"
+        curl.exe -I %%d --max-time 10 >> "%outfile%" 2>&1
+        if !ERRORLEVEL! EQU 0 (
+            echo curl %%d — ОК >> "%tempstatus%"
+        ) else (
+            echo curl %%d — ОШИБКА >> "%tempstatus%"
+        )
+        echo. >> "%outfile%"
     )
 )
 
